@@ -1,2 +1,7 @@
-nums1 = [0]
-print(nums1[-1])
+words = ["hello", "bye"]
+
+for word in words:
+    word = "".join(sorted(word))
+    print(word)
+
+print(words)
