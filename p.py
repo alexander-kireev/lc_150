@@ -1,28 +1,18 @@
-# t1
-nums = [4, 8, 15, 16]
+# nums = [[0,0], [0,1], [0,2]]
 
-for i, num in enumerate(nums):
-    print(i, num)
+# directions = [[-1,0], [0,1], [1,0], [0,-1]]
 
-
-
-# t2
-nums = [4, 8, 15, 16]
-def find_index(nums, target):
-    for i, num in enumerate(nums):
-        if num == target:
-            return i
-        
-    return -1
-
-# t3
-nums = [3, 6, 8, 11, 14]
-for i, num in enumerate(nums):
-    if num % 2 == 0:
-        print(i)
+# for x1, y1 in nums:
+#     for x2,y2 in directions:
+#         new_node = [x1 + x2, y1 + y2]
+#         print(new_node)
 
 
-# t4
-names = ["Alex", "Ivan", "Maria"]
-for i, name in enumerate(names, start=1):
-    print(str(i) + ". " + name)
+image = [
+  [1,2,1],
+  [1,0,1]
+]
+node = [0, 1]
+x = node[2]
+y = node[1]
+print(image[x][y])
