@@ -50,10 +50,68 @@ def is_land(grid, r, c):
     return grid[r][c] == '1'
 
 grid = [
-  ["1","1","0","0","0"],
-  ["1","1","0","0","0"],
-  ["0","0","1","0","0"],
-  ["0","0","0","1","1"]
+    ["1","1","0","0","0"],
+    ["1","1","0","0","0"],
+    ["0","0","1","0","0"],
+    ["0","0","0","1","1"]
 ]
+print(count_islands(grid))  # expected 3
 
-print(count_islands(grid))
+
+grid = [
+    ["1","1","1"],
+    ["0","1","0"],
+    ["1","1","1"]
+]
+print(count_islands(grid))  # expected 1
+
+
+grid = [
+    ["1","0","1"],
+    ["0","1","0"],
+    ["1","0","1"]
+]
+print(count_islands(grid))  # expected 5, diagonals do not connect
+
+
+grid = [
+    ["0","0","0"],
+    ["0","0","0"]
+]
+print(count_islands(grid))  # expected 0
+
+
+grid = [
+    ["1","1","1"],
+    ["1","1","1"]
+]
+print(count_islands(grid))  # expected 1
+
+
+grid = [
+    ["1"]
+]
+print(count_islands(grid))  # expected 1
+
+
+grid = [
+    ["0"]
+]
+print(count_islands(grid))  # expected 0
+
+
+grid = [
+    ["1","0","1","1","0","1"]
+]
+print(count_islands(grid))  # expected 3
+
+
+grid = [
+    ["1"],
+    ["0"],
+    ["1"],
+    ["1"],
+    ["0"],
+    ["1"]
+]
+print(count_islands(grid))  # expected 3
