@@ -36,15 +36,13 @@ class Solution:
     def buildTree(self, inorder: List[int], postorder: List[int]) -> Optional[TreeNode]:
         if not inorder or not postorder:
             return None
-  
+        
         val = postorder.pop()
         root = TreeNode(val)
         mid = inorder.index(val)
         root.right = self.buildTree(inorder[mid + 1:], postorder)
         root.left = self.buildTree(inorder[:mid], postorder)
         return root
-    
-
 
 
 
