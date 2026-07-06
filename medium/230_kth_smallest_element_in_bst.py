@@ -12,7 +12,7 @@ class TreeNode:
 def build_tree(values):
     """
     Builds a binary tree from LeetCode-style level-order input.
-    Example: [4, 2, 6, 1, 3]
+    Example: [3, 1, 4, None, 2]
     """
     if not values:
         return None
@@ -36,51 +36,67 @@ def build_tree(values):
 
     return root
 
-from math import inf
+
 class Solution:
-    def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
-        cur_min = inf
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
         inorder = []
 
         def dfs(root):
             if root is None:
                 return None
-
-            dfs(root.left)
-
-            inorder.append(root.val)
             
+            if len(inorder) == k:
+                return
+            
+            dfs(root.left)
+            inorder.append(root.val)
             dfs(root.right)
-
+        
         dfs(root)
+        
+        return inorder[k - 1]
 
-        for i in range(len(inorder) - 1):
-            cur_min = min(cur_min, abs(inorder[i + 1] - inorder[i]))
-
-        return cur_min
-    
 
 tests = [
-    ([4, 2, 6, 1, 3], 1),
-    ([1, 0, 48, None, None, 12, 49], 1),
-    ([10, 5, 15, None, None, 11, 20], 1),
-    ([8, 4, 12, 2, 6, 10, 14], 2),
-    ([5, 3], 2),
-    ([1, None, 3, None, 6, None, 10], 2),
-    ([10, 7, None, 4, None, 1], 3),
-    ([100, 50, 150, 25, 75, 125, 175, None, None, 74], 1),
+    # 1. Example 1
+    ([3, 1, 4, None, 2], 1, 1),
+
+    # 2. Example 2
+    ([5, 3, 6, 2, 4, None, None, 1], 3, 3),
+
+    # 3. Single node
+    ([1], 1, 1),
+
+    # 4. k is the smallest value
+    ([8, 4, 12, 2, 6, 10, 14], 1, 2),
+
+    # 5. k is the largest value
+    ([8, 4, 12, 2, 6, 10, 14], 7, 14),
+
+    # 6. Middle value in balanced BST
+    ([8, 4, 12, 2, 6, 10, 14], 4, 8),
+
+    # 7. Left-skewed BST
+    ([5, 4, None, 3, None, 2, None, 1], 2, 2),
+
+    # 8. Right-skewed BST
+    ([1, None, 2, None, 3, None, 4, None, 5], 4, 4),
+
+    # 9. Larger uneven BST
+    ([10, 5, 15, 3, 7, 12, 18, 1, 4, 6, 8], 6, 8),
 ]
 
 
 solution = Solution()
 
-for i, (tree_list, expected) in enumerate(tests, 1):
+for i, (tree_list, k, expected) in enumerate(tests, 1):
     root = build_tree(tree_list)
-    output = solution.getMinimumDifference(root)
+    output = solution.kthSmallest(root, k)
 
     print(f"Test {i}")
-    print(f"Input:    {tree_list}")
-    print(f"Output:   {output}")
-    print(f"Expected: {expected}")
-    print(f"Pass:     {output == expected}")
+    print(f"Input tree: {tree_list}")
+    print(f"k:          {k}")
+    print(f"Output:     {output}")
+    print(f"Expected:   {expected}")
+    print(f"Pass:       {output == expected}")
     print("-" * 40)

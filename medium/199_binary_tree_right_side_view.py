@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from collections import deque
 
 
@@ -11,8 +11,8 @@ class TreeNode:
 
 def build_tree(values):
     """
-    Builds a binary tree from LeetCode-style level-order input.
-    Example: [4, 2, 6, 1, 3]
+    Builds a binary tree from LeetCode-style level-order list.
+    Example: [1, 2, 3, None, 5, None, 4]
     """
     if not values:
         return None
@@ -36,39 +36,40 @@ def build_tree(values):
 
     return root
 
-from math import inf
+
 class Solution:
-    def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
-        cur_min = inf
-        inorder = []
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        output = []
+        level = []
+        
+        if root is not None:
+            level.append(root)
 
-        def dfs(root):
-            if root is None:
-                return None
+        while level:
+            new_level = []
+            output.append(level[-1].val)
 
-            dfs(root.left)
+            for node in level:
+                if node.left is not None:
+                    new_level.append(node.left)
+                if node.right is not None:
+                    new_level.append(node.right)
 
-            inorder.append(root.val)
-            
-            dfs(root.right)
+            level = new_level
 
-        dfs(root)
+        return output
 
-        for i in range(len(inorder) - 1):
-            cur_min = min(cur_min, abs(inorder[i + 1] - inorder[i]))
 
-        return cur_min
-    
 
 tests = [
-    ([4, 2, 6, 1, 3], 1),
-    ([1, 0, 48, None, None, 12, 49], 1),
-    ([10, 5, 15, None, None, 11, 20], 1),
-    ([8, 4, 12, 2, 6, 10, 14], 2),
-    ([5, 3], 2),
-    ([1, None, 3, None, 6, None, 10], 2),
-    ([10, 7, None, 4, None, 1], 3),
-    ([100, 50, 150, 25, 75, 125, 175, None, None, 74], 1),
+    ([1, 2, 3, None, 5, None, 4], [1, 3, 4]),
+    ([], []),
+    ([1], [1]),
+    ([1, None, 2, None, 3], [1, 2, 3]),
+    ([1, 2, None, 3, None, 4], [1, 2, 3, 4]),
+    ([1, 2, 3, 4], [1, 3, 4]),
+    ([1, 2, 3, 4, 5], [1, 3, 5]),
+    ([1, 2, 3, None, 5, 6, None, None, 7], [1, 3, 6, 7]),
 ]
 
 
@@ -76,7 +77,7 @@ solution = Solution()
 
 for i, (tree_list, expected) in enumerate(tests, 1):
     root = build_tree(tree_list)
-    output = solution.getMinimumDifference(root)
+    output = solution.rightSideView(root)
 
     print(f"Test {i}")
     print(f"Input:    {tree_list}")
