@@ -1,138 +1,143 @@
 # Definition for a binary tree node.
 class TreeNode:
-    def __init__(self, x):
-        self.val = x
-        self.left = None
-        self.right = None
-
-class Solution:
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        last = [None]
-
-        def dfs(root, found):
-            if root is None:
-                return False
-
-            if root == p:
-                found.add(p)
-            
-            if root == q:
-                found.add(q)
-
-            if p in found and q in found:
-                return
-
-            dfs(root.left, found)
-            dfs(root.right, found)
-
-            if p in found and q in found:
-                last[0] = root
-
-        dfs(root, set())
-        return last[0]
-        
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 
 
-from collections import deque
+def lowestCommonAncestor(root, p, q):
+    if not root:
+        return None
 
-def build_tree(values):
-    if not values:
-        return None, {}
+    if root == p or root == q:
+        return root
 
-    root = TreeNode(values[0])
-    nodes = {values[0]: root}
-    queue = deque([root])
-    i = 1
+    left = lowestCommonAncestor(root.left, p, q)
+    right = lowestCommonAncestor(root.right, p, q)
 
-    while queue and i < len(values):
-        node = queue.popleft()
+    if left and right:
+        return root
+    else:
+        return left or right
 
-        if i < len(values) and values[i] is not None:
-            node.left = TreeNode(values[i])
-            nodes[values[i]] = node.left
-            queue.append(node.left)
-        i += 1
+# Build tree:
+#
+#           3
+#         /   \
+#        5     1
+#       / \   / \
+#      6   2 0   8
+#         / \
+#        7   4
+#
+n3 = TreeNode(3)
+n5 = TreeNode(5)
+n1 = TreeNode(1)
+n6 = TreeNode(6)
+n2 = TreeNode(2)
+n0 = TreeNode(0)
+n8 = TreeNode(8)
+n7 = TreeNode(7)
+n4 = TreeNode(4)
 
-        if i < len(values) and values[i] is not None:
-            node.right = TreeNode(values[i])
-            nodes[values[i]] = node.right
-            queue.append(node.right)
-        i += 1
+n3.left = n5
+n3.right = n1
 
-    return root, nodes
+n5.left = n6
+n5.right = n2
+
+n1.left = n0
+n1.right = n8
+
+n2.left = n7
+n2.right = n4
 
 
 tests = [
-    (
-        [3, 5, 1, 6, 2, 0, 8, None, None, 7, 4],
-        5,
-        1,
-        3,
-    ),
-    (
-        [3, 5, 1, 6, 2, 0, 8, None, None, 7, 4],
-        5,
-        4,
-        5,
-    ),
-    (
-        [1, 2],
-        1,
-        2,
-        1,
-    ),
-    (
-        [1, 2, 3],
-        2,
-        3,
-        1,
-    ),
-    (
-        [1, 2, 3, 4, 5],
-        4,
-        5,
-        2,
-    ),
-    (
-        [1, 2, 3, 4, 5],
-        4,
-        3,
-        1,
-    ),
-    (
-        [10, 5, 15, 3, 7, 12, 18, 1, 4, 6, 8],
-        6,
-        8,
-        7,
-    ),
-    (
-        [10, 5, 15, 3, 7, 12, 18, 1, 4, 6, 8],
-        1,
-        8,
-        5,
-    ),
-    (
-        [10, 5, 15, 3, 7, 12, 18, 1, 4, 6, 8],
-        1,
-        18,
-        10,
-    ),
+    (n3, n5, n1, 3),   # split across root
+    (n3, n5, n4, 5),   # p is ancestor of q
+    (n3, n6, n4, 5),   # both inside left subtree
+    (n3, n7, n4, 2),   # siblings under same parent
+    (n3, n0, n8, 1),   # siblings in right subtree
+    (n3, n6, n8, 3),   # deep nodes on opposite sides
+    (n3, n2, n7, 2),   # p is ancestor of q
+    (n3, n3, n4, 3),   # root itself is one target
 ]
 
-sol = Solution()
+for root, p, q, expected in tests:
+    result = lowestCommonAncestor(root, p, q)
+    print(
+        f"p={p.val}, q={q.val} -> "
+        f"{result.val if result else None} "
+        f"(expected {expected})"
+    )
 
-for values, p_val, q_val, expected_val in tests:
-    root, nodes = build_tree(values)
 
-    p = nodes[p_val]
-    q = nodes[q_val]
 
-    result = sol.lowestCommonAncestor(root, p, q)
 
-    print(f"Tree:      {values}")
-    print(f"p:         {p_val}")
-    print(f"q:         {q_val}")
-    print(f"Expected:  {expected_val}")
-    print(f"Got:       {result.val if result else None}")
-    print("PASS" if result and result.val == expected_val else "FAIL")
-    print("-" * 40)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def lowestCommonAncestor(root, p, q):
+    p_path = []
+    q_path = []
+
+    def dfs(root, target):
+        if root is None:
+            return
+        
+        if target == p:
+            path = p_path
+            if path and path[-1] == p:
+                return
+        else:
+            path = q_path
+            if path and path[-1] == q:
+                return
+
+        path.append(root)
+
+        dfs(root.left, target)
+        dfs(root.right, target)
+
+        if target == p:
+            path = p_path
+            if path and path[-1] == p:
+                return
+            path.pop()
+        else:
+            path = q_path
+            if path and path[-1] == q:
+                return
+            path.pop()
+    
+    dfs(root, p)
+    dfs(root, q)
+
+    last_common = 0
+    while last_common < len(p_path) and last_common < len(q_path) and p_path[last_common] == q_path[last_common]:
+        last_common += 1
+    
+    return p_path[last_common - 1]
