@@ -1,11 +1,10 @@
 def combine(n, k):
     res, sol = [], []
     nums = list(range(1, n + 1))
-    calls = 0
+
 
     def dfs(i):
-        nonlocal calls
-        calls += 1
+
         if len(sol) == k:
             res.append(sol.copy())
             return
@@ -26,7 +25,7 @@ def combine(n, k):
         dfs(i + 1)
 
     dfs(0)
-    print(calls)
+
     return res
 
 
