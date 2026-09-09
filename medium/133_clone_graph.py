@@ -9,21 +9,21 @@ def cloneGraph(node):
 
     def dfs(node):
         if node is None:
-            return node
-        
+            return None
+
         if node in clones:
             return clones[node]
 
-        clone = Node(node.val)
+        clone =  Node(node.val)
         clones[node] = clone
 
-        for neighbor in node.neighbors:
-            clone.neighbors.append(dfs(neighbor))
+        for n in node.neighbors:
+            clone.neighbors.append(dfs(n))
 
         return clone
         
     return dfs(node)
-
+    
 
 def build_graph(adj_list):
     if not adj_list:
