@@ -4,10 +4,12 @@ def lengthOfLIS(nums):
     lis = [1] * len(nums)
 
     for i in range(1, len(nums)):
+
         j = 0
 
         while j < i:
-            if nums[i] > nums[j]:
+
+            if nums[j] < nums[i]:
                 lis[i] = max(lis[i], lis[j] + 1)
             j += 1
 
