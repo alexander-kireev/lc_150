@@ -1,25 +1,25 @@
 from math import inf
 def mincostTickets(days, costs):
+    days_set = set(days)
+    calendar = [inf] * 366
+    calendar[0] = 0
 
-    calendar = [inf] * 25
-    calendar[days[0]] = costs[0]
-    TICKETS = [1, 7, 30]
+    PERIOD = [1, 7, 30]
+    
 
-    prev = 0
-
-    for i in range(1, len(days)):
-
+    for i in range(1, len(calendar)):
         
-        for j in range(len(costs)):
-            prev_day = max(day - TICKETS[i], 0)
+        if i in days_set:
 
+            for j in range(len(PERIOD)):
+                prev_day = max(i - PERIOD[j], 0)
+                prev_sum = calendar[prev_day]
+                calendar[i] = min(prev_sum + costs[j], calendar[i])
 
-            calendar[day] = min(calendar[day], calendar[prev_day] + costs[i])
-
-
+        else:
+            calendar[i] = calendar[i - 1]
 
     return calendar[days[-1]]
-
 
 
 tests = [
